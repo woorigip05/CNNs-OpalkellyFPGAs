@@ -1,2 +1,2 @@
-# DL_w-FPGA_Phase1
+# DL_w-FPGA
 Pipelining w/ MNIST using Opal Kelly XEM7350-K410T, simple MLP
