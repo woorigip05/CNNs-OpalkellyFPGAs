@@ -1,0 +1,30 @@
+# Vivado project files (auto-generated, don't commit)
+*.jou
+*.log
+*.str
+*.mif
+*.xpr.bak
+
+# Build outputs
+*/impl_1/
+*/synth_1/
+*/.Xil/
+*/vivado.jou
+*/vivado.log
+
+# IP output products (regenerated on open)
+*/ip/*/impl/
+*/ip/*/*.xci.bak
+**/*.dcp        # checkpoint files - large binaries
+**/*.bit        # bitfiles - commit selectively if needed
+
+# Simulation
+*/sim_1/
+
+# HLS (if using Vitis HLS)
+solution*/
+.autopilot/
+
+# OS
+.DS_Store
+Thumbs.db
