@@ -60,14 +60,12 @@ def requantize(acc_int32, M0, shift, qmin=-128, qmax=127, apply_relu=True):
     return np.clip(rescaled, lo, qmax).astype(np.int8)
 
 
-def forward(x_float, params):
+def forward_debug(x_float, params):
     """
-    x_float: (N, 784) normalized float32/float64 pixels.
-    params:  dict from load_params(), below.
-    Returns int32 logits, shape (N, 10). fc3's output is never
-    requantized: argmax over a single positive per-tensor-scaled int32
-    accumulator is scale-invariant (see ABACUS-7), so classification
-    needs no dequantization at all.
+    Same computation as forward(), but returns every intermediate stage
+    instead of just the final logits. Used to dump bit-exact reference
+    vectors for the RTL testbench (ABACUS-11), where each stage needs to
+    be checked independently rather than just the end-to-end prediction.
     """
     q0 = quantize_input(x_float, params["fc1_s_x"])
 
@@ -78,7 +76,23 @@ def forward(x_float, params):
     q2 = requantize(acc2, params["fc2_M0"], params["fc2_shift"])
 
     acc3 = linear_int32(q2, params["fc3_weight_int8"], params["fc3_bias_int32"])
-    return acc3
+
+    return {
+        "q0": q0, "acc1": acc1, "q1": q1,
+        "acc2": acc2, "q2": q2, "acc3": acc3,
+    }
+
+
+def forward(x_float, params):
+    """
+    x_float: (N, 784) normalized float32/float64 pixels.
+    params:  dict from load_params(), below.
+    Returns int32 logits, shape (N, 10). fc3's output is never
+    requantized: argmax over a single positive per-tensor-scaled int32
+    accumulator is scale-invariant (see ABACUS-7), so classification
+    needs no dequantization at all.
+    """
+    return forward_debug(x_float, params)["acc3"]
 
 
 def load_params(quant_path="quant_params_ptq.npz", requant_path="requant_constants.npz"):
