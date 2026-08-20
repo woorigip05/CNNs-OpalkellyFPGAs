@@ -33,3 +33,13 @@ Thumbs.db
 model/data/
 *.pt
 *.npz
+
+# Simulation artifacts -- none of this belongs in git.
+sim_build/
+obj_dir/
+*.fst
+*.fst.hier
+*.vcd
+results.xml
+__pycache__/
+*.pyc
