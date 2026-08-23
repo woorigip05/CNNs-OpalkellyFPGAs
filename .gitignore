@@ -43,3 +43,13 @@ obj_dir/
 results.xml
 __pycache__/
 *.pyc
+
+# Synthesis Related
+.synthrc
+build/
+
+# XSIM (ABACUS-15)
+sim/xsim/work/
+xsim.dir/
+*.wdb
+*.pb
